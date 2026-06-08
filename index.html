@@ -218,8 +218,7 @@
     </div>
     <div class="sbox">
       <div class="sprefix" id="search-prefix">NISN</div>
-      <input type="text" id="nisn-input" maxlength="10" inputmode="numeric" placeholder="Masukkan 10 digit NISN"/>
-      <input type="text" id="nama-input" style="display:none;" placeholder="Masukkan nama siswa" maxlength="60"/>
+      <input type="text" id="search-input" maxlength="10" inputmode="numeric" placeholder="Masukkan 10 digit NISN"/>
       <button id="cari-btn" onclick="cariDokumen()">🔍 Cari</button>
     </div>
     <p class="shint" id="search-hint">Contoh NISN: 0012345678</p>
@@ -286,10 +285,22 @@ function switchTab(tab) {
   activeTab = tab;
   document.getElementById('tab-nisn').className = 'stab' + (tab==='nisn' ? ' active' : '');
   document.getElementById('tab-nama').className = 'stab' + (tab==='nama' ? ' active' : '');
-  document.getElementById('nisn-input').style.display = tab==='nisn' ? '' : 'none';
-  document.getElementById('nama-input').style.display = tab==='nama' ? '' : 'none';
-  document.getElementById('search-prefix').textContent = tab==='nisn' ? 'NISN' : 'NAMA';
-  document.getElementById('search-hint').textContent = tab==='nisn' ? 'Contoh NISN: 0012345678' : 'Contoh: Budi Santoso';
+  var inp = document.getElementById('search-input');
+  inp.value = '';
+  if (tab === 'nisn') {
+    inp.maxLength = 10;
+    inp.inputMode = 'numeric';
+    inp.placeholder = 'Masukkan 10 digit NISN';
+    document.getElementById('search-prefix').textContent = 'NISN';
+    document.getElementById('search-hint').textContent = 'Contoh NISN: 0012345678';
+  } else {
+    inp.maxLength = 60;
+    inp.inputMode = 'text';
+    inp.placeholder = 'Masukkan nama siswa';
+    document.getElementById('search-prefix').textContent = 'NAMA';
+    document.getElementById('search-hint').textContent = 'Contoh: Budi Santoso';
+  }
+  inp.focus();
   setState('intro');
 }
 
@@ -321,14 +332,15 @@ function formatSize(bytes) {
 
 function cariDokumen() {
   var url = document.getElementById('webapp-url').value.trim();
+  var val = document.getElementById('search-input').value.trim();
   var nisn = '', nama = '';
 
   if (activeTab === 'nisn') {
-    nisn = document.getElementById('nisn-input').value.trim();
+    nisn = val;
     if (!nisn) { showError('Harap masukkan NISN terlebih dahulu.'); return; }
     if (!/^\d{10}$/.test(nisn)) { showError('NISN harus tepat <strong>10 angka</strong>. Contoh: <code>0012345678</code>'); return; }
   } else {
-    nama = document.getElementById('nama-input').value.trim();
+    nama = val;
     if (!nama) { showError('Harap masukkan nama siswa terlebih dahulu.'); return; }
     if (nama.length < 3) { showError('Nama terlalu pendek, minimal 3 karakter.'); return; }
   }
@@ -422,9 +434,10 @@ function handleResponse(data) {
   setState('result');
 }
 
-document.getElementById('nisn-input').addEventListener('keydown', function(e){ if(e.key==='Enter') cariDokumen(); });
-document.getElementById('nama-input').addEventListener('keydown', function(e){ if(e.key==='Enter') cariDokumen(); });
-document.getElementById('nisn-input').addEventListener('input', function(){ this.value = this.value.replace(/\D/g,''); });
+document.getElementById('search-input').addEventListener('keydown', function(e){ if(e.key==='Enter') cariDokumen(); });
+document.getElementById('search-input').addEventListener('input', function(){
+  if (activeTab === 'nisn') this.value = this.value.replace(/\D/g,'');
+});
 
 setState('intro');
 </script>

@@ -184,6 +184,11 @@
     .step-text a { color: var(--accent); }
     .step-text code { background: rgba(0,0,0,0.07); padding: 1px 5px; border-radius: 4px; font-size: 0.75rem; }
 
+    .stabs { display: flex; gap: 6px; justify-content: center; margin-bottom: 10px; }
+    .stab { background: rgba(255,255,255,0.15); color: rgba(255,255,255,0.8); border: 1px solid rgba(255,255,255,0.25); padding: 6px 18px; border-radius: 20px; font-size: 0.82rem; font-weight: 600; cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif; transition: all 0.2s; }
+    .stab.active { background: #fff; color: var(--accent); border-color: #fff; }
+    .stab:hover:not(.active) { background: rgba(255,255,255,0.25); }
+
     footer { text-align: center; padding: 1.5rem; font-size: 0.73rem; color: var(--muted); border-top: 1px solid var(--border); }
 
     @media(max-width:560px) {
@@ -204,15 +209,20 @@
 </header>
 
 <div class="hero">
-  <h1>Cari Dokumen dengan NISN</h1>
+  <h1>Cari Dokumen Siswa</h1>
   <p>Rapor, sertifikat, dan dokumen lainnya tersimpan di Google Drive.</p>
   <div class="search-wrap">
+    <div class="stabs">
+      <button class="stab active" id="tab-nisn" onclick="switchTab('nisn')">🔢 NISN</button>
+      <button class="stab" id="tab-nama" onclick="switchTab('nama')">👤 Nama</button>
+    </div>
     <div class="sbox">
-      <div class="sprefix">NISN</div>
+      <div class="sprefix" id="search-prefix">NISN</div>
       <input type="text" id="nisn-input" maxlength="10" inputmode="numeric" placeholder="Masukkan 10 digit NISN"/>
+      <input type="text" id="nama-input" style="display:none;" placeholder="Masukkan nama siswa" maxlength="60"/>
       <button id="cari-btn" onclick="cariDokumen()">🔍 Cari</button>
     </div>
-    <p class="shint">Contoh NISN: 0012345678</p>
+    <p class="shint" id="search-hint">Contoh NISN: 0012345678</p>
   </div>
 </div>
 
@@ -270,6 +280,19 @@
 <footer>Portal Dokumen Siswa &nbsp;·&nbsp; Menggunakan Google Apps Script &amp; Google Drive &nbsp;·&nbsp; Gratis</footer>
 
 <script>
+var activeTab = 'nisn';
+
+function switchTab(tab) {
+  activeTab = tab;
+  document.getElementById('tab-nisn').className = 'stab' + (tab==='nisn' ? ' active' : '');
+  document.getElementById('tab-nama').className = 'stab' + (tab==='nama' ? ' active' : '');
+  document.getElementById('nisn-input').style.display = tab==='nisn' ? '' : 'none';
+  document.getElementById('nama-input').style.display = tab==='nama' ? '' : 'none';
+  document.getElementById('search-prefix').textContent = tab==='nisn' ? 'NISN' : 'NAMA';
+  document.getElementById('search-hint').textContent = tab==='nisn' ? 'Contoh NISN: 0012345678' : 'Contoh: Budi Santoso';
+  setState('intro');
+}
+
 function setState(s) {
   var ids = ['status','error-box','student-card','docs-wrap','empty-state','intro-state'];
   ids.forEach(function(id){ var el=document.getElementById(id); if(el) el.style.display='none'; });
@@ -297,84 +320,110 @@ function formatSize(bytes) {
 }
 
 function cariDokumen() {
-  var nisn = document.getElementById('nisn-input').value.trim();
-  var url  = document.getElementById('webapp-url').value.trim();
+  var url = document.getElementById('webapp-url').value.trim();
+  var nisn = '', nama = '';
 
-  if (!nisn) { showError('Harap masukkan NISN terlebih dahulu.'); return; }
-  if (!/^\d{10}$/.test(nisn)) { showError('NISN harus tepat <strong>10 angka</strong>. Contoh: <code>0012345678</code>'); return; }
-  if (!url) { showError('Harap isi <strong>URL Web App</strong> Google Apps Script di bagian Konfigurasi di atas.'); return; }
-  if (!url.startsWith('https://script.google.com')) { showError('URL tidak valid. Harus dimulai dengan <code>https://script.google.com/macros/s/...</code>'); return; }
+  if (activeTab === 'nisn') {
+    nisn = document.getElementById('nisn-input').value.trim();
+    if (!nisn) { showError('Harap masukkan NISN terlebih dahulu.'); return; }
+    if (!/^\d{10}$/.test(nisn)) { showError('NISN harus tepat <strong>10 angka</strong>. Contoh: <code>0012345678</code>'); return; }
+  } else {
+    nama = document.getElementById('nama-input').value.trim();
+    if (!nama) { showError('Harap masukkan nama siswa terlebih dahulu.'); return; }
+    if (nama.length < 3) { showError('Nama terlalu pendek, minimal 3 karakter.'); return; }
+  }
+
+  if (!url) { showError('URL Web App tidak ditemukan.'); return; }
 
   setState('loading');
-  document.getElementById('status-text').textContent = 'Mencari NISN ' + nisn + ' ...';
+  document.getElementById('status-text').textContent = nisn ? 'Mencari NISN ' + nisn + ' ...' : 'Mencari nama "' + nama + '" ...';
 
-  // JSONP call
   var cbName = 'cb_' + Date.now();
   var script = document.createElement('script');
   var timeout = setTimeout(function(){
     showError('Waktu habis. Periksa URL Web App dan koneksi internet kamu.');
-    document.body.removeChild(script);
+    if (document.body.contains(script)) document.body.removeChild(script);
   }, 15000);
 
   window[cbName] = function(data) {
     clearTimeout(timeout);
     delete window[cbName];
-    document.body.removeChild(script);
-    handleResponse(data, nisn);
+    if (document.body.contains(script)) document.body.removeChild(script);
+    handleResponse(data);
   };
 
-  script.src = url + '?nisn=' + encodeURIComponent(nisn) + '&callback=' + cbName;
+  var qs = nisn ? 'nisn=' + encodeURIComponent(nisn) : 'nama=' + encodeURIComponent(nama);
+  script.src = url + '?' + qs + '&callback=' + cbName;
   script.onerror = function() {
     clearTimeout(timeout);
     showError('Gagal terhubung ke server. Pastikan URL Web App benar dan sudah di-deploy sebagai <strong>Anyone</strong>.');
-    document.body.removeChild(script);
+    if (document.body.contains(script)) document.body.removeChild(script);
   };
   document.body.appendChild(script);
 }
 
-function handleResponse(data, nisn) {
+function handleResponse(data) {
   if (!data) { showError('Respons tidak valid dari server.'); return; }
+  if (data.status === 'error') { showError(data.message || 'Terjadi kesalahan di server.'); return; }
 
-  if (data.status === 'error') {
-    showError(data.message || 'Terjadi kesalahan di server.');
-    return;
-  }
-
-  var nama = data.namaSiswa || 'Siswa';
-  document.getElementById('sc-avatar').textContent = getInitials(nama);
-  document.getElementById('sc-name').textContent   = nama;
-  document.getElementById('sc-meta').textContent   = '📁 ' + (data.namaFolder || nisn);
-  document.getElementById('sc-nisn').textContent   = 'NISN: ' + nisn;
-
-  if (data.status === 'not_found' || !data.dokumen || data.dokumen.length === 0) {
+  if (data.status === 'not_found' || !data.hasil || data.hasil.length === 0) {
+    var keyword = data.nisn || data.nama || '';
+    document.getElementById('sc-avatar').textContent = '?';
+    document.getElementById('sc-name').textContent = 'Siswa Tidak Ditemukan';
+    document.getElementById('sc-meta').textContent = 'Kata kunci: ' + keyword;
+    document.getElementById('sc-nisn').textContent = data.nisn ? 'NISN: ' + data.nisn : 'Nama: ' + data.nama;
     setState('empty');
     return;
   }
 
   var list = document.getElementById('doc-list');
   list.innerHTML = '';
-  document.getElementById('docs-count').textContent = data.dokumen.length + ' dokumen';
+  var totalDok = 0;
 
-  data.dokumen.forEach(function(doc) {
-    var d = document.createElement('div');
-    d.className = 'doc-item';
-    d.innerHTML =
-      '<div class="doc-ico">📄</div>' +
-      '<div class="doc-info">' +
-        '<div class="doc-name" title="' + doc.nama + '">' + doc.nama + '</div>' +
-        '<div class="doc-sub">' + (formatSize(doc.ukuran) ? formatSize(doc.ukuran) + ' · ' : '') + (doc.tanggal||'') + '</div>' +
-      '</div>' +
-      '<div>' +
-        '<a class="btn-v" href="' + doc.viewUrl + '" target="_blank">👁️ Lihat</a>' +
-        '<a class="btn-d" href="' + doc.downloadUrl + '" target="_blank">⬇️ Unduh</a>' +
-      '</div>';
-    list.appendChild(d);
+  data.hasil.forEach(function(siswa) {
+    // Tampilkan header per siswa (untuk pencarian nama bisa lebih dari 1)
+    if (data.hasil.length > 1) {
+      var divHeader = document.createElement('div');
+      divHeader.style.cssText = 'background:var(--accent-light);border:1px solid #c8e6d7;border-radius:10px;padding:10px 14px;margin-bottom:6px;margin-top:10px;display:flex;align-items:center;gap:10px;';
+      divHeader.innerHTML = '<div style="width:36px;height:36px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.9rem;flex-shrink:0;">' + getInitials(siswa.namaSiswa) + '</div>'
+        + '<div><div style="font-weight:700;font-size:0.9rem;">' + siswa.namaSiswa + '</div>'
+        + '<div style="font-size:0.75rem;color:var(--muted);">📁 ' + siswa.namaFolder + ' · ' + siswa.totalFile + ' dokumen</div></div>';
+      list.appendChild(divHeader);
+    }
+
+    siswa.dokumen.forEach(function(doc) {
+      var d = document.createElement('div');
+      d.className = 'doc-item';
+      d.innerHTML = '<div class="doc-ico">📄</div>'
+        + '<div class="doc-info"><div class="doc-name" title="' + doc.nama + '">' + doc.nama + '</div>'
+        + '<div class="doc-sub">' + (formatSize(doc.ukuran) ? formatSize(doc.ukuran) + ' · ' : '') + (doc.tanggal||'') + '</div></div>'
+        + '<div><a class="btn-v" href="' + doc.viewUrl + '" target="_blank">👁️ Lihat</a>'
+        + '<a class="btn-d" href="' + doc.downloadUrl + '" target="_blank">⬇️ Unduh</a></div>';
+      list.appendChild(d);
+      totalDok++;
+    });
+
+    if (siswa.dokumen.length === 0) {
+      var empty = document.createElement('div');
+      empty.style.cssText = 'text-align:center;padding:1rem;color:var(--muted);font-size:0.82rem;';
+      empty.textContent = 'Tidak ada dokumen PDF di folder ini.';
+      list.appendChild(empty);
+    }
   });
+
+  // Update student card (pakai data siswa pertama)
+  var first = data.hasil[0];
+  document.getElementById('sc-avatar').textContent = getInitials(first.namaSiswa);
+  document.getElementById('sc-name').textContent = data.hasil.length > 1 ? data.hasil.length + ' siswa ditemukan' : first.namaSiswa;
+  document.getElementById('sc-meta').textContent = '📁 ' + (data.hasil.length > 1 ? 'Pencarian: ' + data.nama : first.namaFolder);
+  document.getElementById('sc-nisn').textContent = data.nisn ? 'NISN: ' + data.nisn : 'Nama: ' + data.nama;
+  document.getElementById('docs-count').textContent = totalDok + ' dokumen';
 
   setState('result');
 }
 
 document.getElementById('nisn-input').addEventListener('keydown', function(e){ if(e.key==='Enter') cariDokumen(); });
+document.getElementById('nama-input').addEventListener('keydown', function(e){ if(e.key==='Enter') cariDokumen(); });
 document.getElementById('nisn-input').addEventListener('input', function(){ this.value = this.value.replace(/\D/g,''); });
 
 setState('intro');

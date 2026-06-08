@@ -64,7 +64,7 @@
       letter-spacing: 0.5px; border-right: 1px solid var(--border);
       white-space: nowrap;
     }
-    #nisn-input {
+    #search-input {
       flex: 1; border: none; outline: none;
       padding: 0.9rem 0.75rem;
       font-size: 1.1rem;
@@ -72,7 +72,8 @@
       font-weight: 700; letter-spacing: 2px;
       color: var(--text); background: transparent;
     }
-    #nisn-input::placeholder { color: #ccc; font-weight: 400; letter-spacing: 0; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.9rem; }
+    #search-input::placeholder { color: #ccc; font-weight: 400; letter-spacing: 0; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.9rem; }
+    #search-input.mode-nama { font-family: 'Plus Jakarta Sans', sans-serif; letter-spacing: 0; font-size: 1rem; font-weight: 600; }
     #cari-btn {
       background: var(--accent); color: #fff; border: none;
       padding: 0 1.4rem; font-size: 0.9rem; font-weight: 600;
@@ -227,7 +228,7 @@
 
 <main>
 
-  <input type="hidden" id="webapp-url" value="https://script.google.com/macros/s/AKfycbzaU0SQot3gKfa3ss8W9CZzHCjbTzpM64eFAKDKc7yiuGBGja2EZ5Wb_2rPA734qzO6TQ/exec"/>
+  <input type="hidden" id="webapp-url" value="https://script.google.com/macros/s/AKfycbwvNhoOPhLKAMwur9oywz-eT_2Z5gmvBAnv913yIsunus3PwfPLL0-FmVViXbnuHR--SA/exec"/>
 
   <!-- LOADING -->
   <div id="status">
@@ -291,12 +292,14 @@ function switchTab(tab) {
     inp.maxLength = 10;
     inp.inputMode = 'numeric';
     inp.placeholder = 'Masukkan 10 digit NISN';
+    inp.className = '';
     document.getElementById('search-prefix').textContent = 'NISN';
     document.getElementById('search-hint').textContent = 'Contoh NISN: 0012345678';
   } else {
     inp.maxLength = 60;
     inp.inputMode = 'text';
     inp.placeholder = 'Masukkan nama siswa';
+    inp.className = 'mode-nama';
     document.getElementById('search-prefix').textContent = 'NAMA';
     document.getElementById('search-hint').textContent = 'Contoh: Budi Santoso';
   }

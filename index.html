@@ -117,7 +117,7 @@
     </div>
     <div class="sbox">
       <div class="sprefix" id="search-prefix">NISN</div>
-      <input type="text" id="search-input" maxlength="10" inputmode="numeric" placeholder="Masukkan 10 digit NISN"/>
+      <input type="text" id="search-input" maxlength="10" inputmode="numeric" placeholder="Masukkan 10 digit NISN" data-mode="nisn"/>
       <button id="cari-btn" onclick="cariDokumen()">🔍 Cari</button>
     </div>
     <p class="shint" id="search-hint">Contoh NISN: 0012345678</p>
@@ -184,27 +184,34 @@
 <footer>Portal Dokumen Siswa &nbsp;·&nbsp; SMPN 4 Arjasa &nbsp;·&nbsp; Menggunakan Google Drive</footer>
 
 <script>
-var activeTab = 'nisn';
 var dokumenCache = [];
 
+function getMode() {
+  return document.getElementById('search-input').getAttribute('data-mode') || 'nisn';
+}
+
 function switchTab(tab) {
-  activeTab = tab;
-  document.getElementById('tab-nisn').className = 'stab' + (tab==='nisn' ? ' active' : '');
-  document.getElementById('tab-nama').className = 'stab' + (tab==='nama' ? ' active' : '');
   var inp = document.getElementById('search-input');
+  inp.setAttribute('data-mode', tab);
   inp.value = '';
+
+  document.getElementById('tab-nisn').className = 'stab' + (tab==='nisn' ? ' active' : '');
+  document.getElementById('tab-nama').className  = 'stab' + (tab==='nama'  ? ' active' : '');
+
   if (tab === 'nisn') {
-    inp.maxLength = 10; inp.inputMode = 'numeric';
+    inp.setAttribute('maxlength', '10');
+    inp.setAttribute('inputmode', 'numeric');
     inp.placeholder = 'Masukkan 10 digit NISN';
     inp.className = '';
     document.getElementById('search-prefix').textContent = 'NISN';
-    document.getElementById('search-hint').textContent = 'Contoh NISN: 0012345678';
+    document.getElementById('search-hint').textContent   = 'Contoh NISN: 0012345678';
   } else {
-    inp.maxLength = 60; inp.inputMode = 'text';
+    inp.setAttribute('maxlength', '60');
+    inp.setAttribute('inputmode', 'text');
     inp.placeholder = 'Masukkan nama siswa';
     inp.className = 'mode-nama';
     document.getElementById('search-prefix').textContent = 'NAMA';
-    document.getElementById('search-hint').textContent = 'Contoh: Budi Santoso';
+    document.getElementById('search-hint').textContent   = 'Contoh: Budi Santoso';
   }
   inp.focus();
   setState('intro');
@@ -246,21 +253,19 @@ function formatSize(bytes) {
 }
 
 function cariDokumen() {
-  var url = document.getElementById('webapp-url').value.trim();
-  var val = document.getElementById('search-input').value.trim();
-  var nisn='', nama='';
-  var tab = activeTab;
+  var mode = getMode();
+  var url  = document.getElementById('webapp-url').value.trim();
+  var val  = document.getElementById('search-input').value.trim();
+  var nisn = '', nama = '';
 
-  if (tab==='nisn') {
+  if (mode === 'nisn') {
     nisn = val;
     if (!nisn) { showError('Harap masukkan NISN terlebih dahulu.'); return; }
     if (!/^\d{10}$/.test(nisn)) { showError('NISN harus tepat <strong>10 angka</strong>. Contoh: <code>0012345678</code>'); return; }
-  } else if (tab==='nama') {
+  } else {
     nama = val;
     if (!nama) { showError('Harap masukkan nama siswa.'); return; }
     if (nama.length < 3) { showError('Nama terlalu pendek, minimal 3 karakter.'); return; }
-  } else {
-    showError('Pilih metode pencarian: NISN atau Nama.'); return;
   }
 
   if (!url) { showError('URL Web App tidak ditemukan.'); return; }
@@ -380,8 +385,7 @@ function kirimWA() {
 
 document.getElementById('search-input').addEventListener('keydown', function(e){ if(e.key==='Enter') cariDokumen(); });
 document.getElementById('search-input').addEventListener('input', function(){
-  if (activeTab==='nisn') this.value = this.value.replace(/\D/g,'');
-  // mode nama: biarkan semua karakter masuk
+  if (getMode()==='nisn') this.value = this.value.replace(/\D/g,'');
 });
 document.getElementById('wa-input').addEventListener('keydown', function(e){ if(e.key==='Enter') kirimWA(); });
 document.getElementById('wa-input').addEventListener('input', function(){ this.value=this.value.replace(/\D/g,''); });

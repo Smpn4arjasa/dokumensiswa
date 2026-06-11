@@ -8,130 +8,45 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --bg: #f4f2ed;
-      --card: #ffffff;
-      --border: #e0ddd5;
-      --text: #1a1915;
-      --muted: #7a7870;
-      --accent: #1a5c3a;
-      --accent-light: #e6f2ec;
-      --accent-mid: #2d8c5a;
-      --danger: #c0392b;
-      --danger-bg: #fdf0ee;
-      --radius: 14px;
+      --bg: #f4f2ed; --card: #ffffff; --border: #e0ddd5;
+      --text: #1a1915; --muted: #7a7870;
+      --accent: #1a5c3a; --accent-light: #e6f2ec; --accent-mid: #2d8c5a;
+      --wa: #25D366; --wa-dark: #128C7E;
+      --danger: #c0392b; --danger-bg: #fdf0ee; --radius: 14px;
     }
-    body {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-    }
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
 
-    /* HEADER */
-    header {
-      background: var(--accent);
-      padding: 0 2rem;
-      height: 60px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
+    header { background: var(--accent); padding: 0 2rem; height: 60px; display: flex; align-items: center; justify-content: space-between; }
     .logo { display: flex; align-items: center; gap: 10px; color: #fff; font-weight: 700; font-size: 0.95rem; }
     .logo-box { width: 32px; height: 32px; background: rgba(255,255,255,0.15); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1rem; }
     .hbadge { background: rgba(255,255,255,0.15); color: #fff; border: 1px solid rgba(255,255,255,0.2); padding: 3px 10px; border-radius: 20px; font-size: 0.7rem; font-weight: 500; }
 
-    /* HERO */
-    .hero {
-      background: var(--accent);
-      padding: 3rem 1.5rem 5rem;
-      text-align: center;
-      color: #fff;
-    }
+    .hero { background: var(--accent); padding: 3rem 1.5rem 5rem; text-align: center; color: #fff; }
     .hero h1 { font-size: 2rem; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 0.5rem; }
     .hero p { color: rgba(255,255,255,0.7); font-size: 0.95rem; margin-bottom: 2rem; }
     .search-wrap { max-width: 540px; margin: 0 auto; }
-    .sbox {
-      display: flex;
-      background: #fff;
-      border-radius: 50px;
-      overflow: hidden;
-      box-shadow: 0 8px 28px rgba(0,0,0,0.2);
-    }
-    .sprefix {
-      padding: 0 1rem 0 1.3rem;
-      display: flex; align-items: center;
-      color: var(--muted); font-size: 0.75rem; font-weight: 700;
-      letter-spacing: 0.5px; border-right: 1px solid var(--border);
-      white-space: nowrap;
-    }
-    #search-input {
-      flex: 1; border: none; outline: none;
-      padding: 0.9rem 0.75rem;
-      font-size: 1.1rem;
-      font-family: 'Space Mono', monospace;
-      font-weight: 700; letter-spacing: 2px;
-      color: var(--text); background: transparent;
-    }
+    .stabs { display: flex; gap: 6px; justify-content: center; margin-bottom: 10px; }
+    .stab { background: rgba(255,255,255,0.15); color: rgba(255,255,255,0.8); border: 1px solid rgba(255,255,255,0.25); padding: 6px 18px; border-radius: 20px; font-size: 0.82rem; font-weight: 600; cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif; transition: all 0.2s; }
+    .stab.active { background: #fff; color: var(--accent); border-color: #fff; }
+    .stab:hover:not(.active) { background: rgba(255,255,255,0.25); }
+    .sbox { display: flex; background: #fff; border-radius: 50px; overflow: hidden; box-shadow: 0 8px 28px rgba(0,0,0,0.2); }
+    .sprefix { padding: 0 1rem 0 1.3rem; display: flex; align-items: center; color: var(--muted); font-size: 0.75rem; font-weight: 700; letter-spacing: 0.5px; border-right: 1px solid var(--border); white-space: nowrap; }
+    #search-input { flex: 1; border: none; outline: none; padding: 0.9rem 0.75rem; font-size: 1.1rem; font-family: 'Space Mono', monospace; font-weight: 700; letter-spacing: 2px; color: var(--text); background: transparent; }
     #search-input::placeholder { color: #ccc; font-weight: 400; letter-spacing: 0; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.9rem; }
     #search-input.mode-nama { font-family: 'Plus Jakarta Sans', sans-serif; letter-spacing: 0; font-size: 1rem; font-weight: 600; }
-    #cari-btn {
-      background: var(--accent); color: #fff; border: none;
-      padding: 0 1.4rem; font-size: 0.9rem; font-weight: 600;
-      cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif;
-      border-radius: 0 50px 50px 0; transition: background 0.2s;
-      white-space: nowrap;
-    }
+    #cari-btn { background: var(--accent); color: #fff; border: none; padding: 0 1.4rem; font-size: 0.9rem; font-weight: 600; cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif; border-radius: 0 50px 50px 0; transition: background 0.2s; white-space: nowrap; }
     #cari-btn:hover { background: #145030; }
     .shint { margin-top: 0.6rem; font-size: 0.75rem; color: rgba(255,255,255,0.45); }
 
-    /* MAIN */
     main { max-width: 740px; margin: -2.5rem auto 0; padding: 0 1.25rem 4rem; }
 
-    /* SETUP */
-    .setup-panel {
-      background: var(--card); border: 1px solid var(--border);
-      border-radius: var(--radius); padding: 1.25rem 1.5rem;
-      margin-bottom: 1rem; box-shadow: 0 2px 12px rgba(0,0,0,0.06);
-    }
-    .setup-toggle {
-      display: flex; align-items: center; justify-content: space-between;
-      cursor: pointer; user-select: none;
-    }
-    .setup-toggle-left { display: flex; align-items: center; gap: 8px; font-size: 0.82rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
-    .chevron { font-size: 0.7rem; transition: transform 0.2s; }
-    .chevron.open { transform: rotate(180deg); }
-    .setup-body { margin-top: 1rem; }
-    .setup-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
-    .setup-body label { font-size: 0.78rem; font-weight: 500; color: var(--muted); display: block; margin-bottom: 3px; }
-    .setup-body input {
-      width: 100%; padding: 8px 10px; border: 1px solid var(--border);
-      border-radius: 8px; font-size: 0.82rem; font-family: 'Space Mono', monospace;
-      outline: none; background: var(--bg); color: var(--text); transition: border-color 0.2s;
-    }
-    .setup-body input:focus { border-color: var(--accent-mid); }
-    .setup-note {
-      font-size: 0.77rem; color: var(--muted); background: var(--accent-light);
-      border-left: 3px solid var(--accent-mid); padding: 8px 12px;
-      border-radius: 0 6px 6px 0; line-height: 1.6; margin-top: 8px;
-    }
-    .setup-note a { color: var(--accent); }
-    .setup-note code { background: rgba(0,0,0,0.07); padding: 1px 5px; border-radius: 4px; font-size: 0.75rem; }
-
-    /* STATUS */
     #status { display: none; text-align: center; padding: 2.5rem 1rem; }
     .spinner { width: 32px; height: 32px; border: 3px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.7s linear infinite; margin: 0 auto 0.75rem; }
     @keyframes spin { to { transform: rotate(360deg); } }
     #status p { color: var(--muted); font-size: 0.88rem; }
 
-    /* ERROR */
-    #error-box {
-      display: none; align-items: flex-start; gap: 10px;
-      background: var(--danger-bg); border: 1px solid #f5c6c1;
-      border-radius: var(--radius); padding: 1rem 1.25rem;
-      color: var(--danger); font-size: 0.88rem; margin-bottom: 1rem;
-    }
+    #error-box { display: none; align-items: flex-start; gap: 10px; background: var(--danger-bg); border: 1px solid #f5c6c1; border-radius: var(--radius); padding: 1rem 1.25rem; color: var(--danger); font-size: 0.88rem; margin-bottom: 1rem; }
 
-    /* STUDENT CARD */
     #student-card { display: none; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: 0 2px 12px rgba(0,0,0,0.06); margin-bottom: 1rem; overflow: hidden; }
     .sc-header { background: var(--accent-light); border-bottom: 1px solid #c8e6d7; padding: 1.1rem 1.5rem; display: flex; align-items: center; gap: 1rem; }
     .sc-avatar { width: 48px; height: 48px; border-radius: 50%; background: var(--accent); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; font-weight: 700; flex-shrink: 0; }
@@ -139,63 +54,46 @@
     .sc-meta { font-size: 0.78rem; color: var(--muted); margin-top: 2px; }
     .nisn-tag { display: inline-block; background: var(--accent); color: #fff; font-family: 'Space Mono', monospace; font-size: 0.72rem; font-weight: 700; padding: 2px 10px; border-radius: 20px; margin-top: 5px; }
 
-    /* DOCS */
+    /* WA FORM */
+    #wa-form { display: none; background: var(--card); border: 1px solid #b2dfdb; border-radius: var(--radius); padding: 1.25rem 1.5rem; margin-bottom: 1rem; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+    .wa-form-title { font-size: 0.85rem; font-weight: 600; color: var(--text); margin-bottom: 0.75rem; display: flex; align-items: center; gap: 6px; }
+    .wa-input-wrap { display: flex; gap: 8px; }
+    .wa-prefix { background: var(--bg); border: 1px solid var(--border); border-radius: 8px 0 0 8px; padding: 0 12px; display: flex; align-items: center; font-size: 0.85rem; font-weight: 600; color: var(--muted); white-space: nowrap; border-right: none; }
+    #wa-input { flex: 1; border: 1px solid var(--border); border-left: none; border-radius: 0; padding: 10px 12px; font-size: 0.9rem; font-family: 'Space Mono', monospace; font-weight: 700; letter-spacing: 1px; outline: none; color: var(--text); background: #fff; transition: border-color 0.2s; }
+    #wa-input:focus { border-color: var(--wa-dark); }
+    #wa-input::placeholder { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 400; letter-spacing: 0; color: #ccc; }
+    #kirim-wa-btn { background: var(--wa); color: #fff; border: none; padding: 0 1.2rem; border-radius: 0 8px 8px 0; font-size: 0.85rem; font-weight: 600; cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif; white-space: nowrap; transition: background 0.2s; display: flex; align-items: center; gap: 6px; }
+    #kirim-wa-btn:hover { background: var(--wa-dark); }
+    .wa-hint { font-size: 0.75rem; color: var(--muted); margin-top: 6px; }
+
     #docs-wrap { display: none; }
     .docs-bar { display: flex; align-items: center; justify-content: space-between; margin: 1.2rem 0 0.6rem; }
     .docs-label { font-size: 0.88rem; font-weight: 600; }
     .docs-count { font-size: 0.75rem; color: var(--muted); }
-    .doc-item {
-      background: var(--card); border: 1px solid var(--border);
-      border-radius: 10px; padding: 0.9rem 1.1rem;
-      display: flex; align-items: center; gap: 0.9rem;
-      margin-bottom: 7px; transition: border-color 0.2s, box-shadow 0.2s;
-    }
+    .doc-item { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 0.9rem 1.1rem; display: flex; align-items: center; gap: 0.9rem; margin-bottom: 7px; transition: border-color 0.2s, box-shadow 0.2s; }
     .doc-item:hover { border-color: #a8d8bc; box-shadow: 0 3px 10px rgba(26,92,58,0.08); }
     .doc-ico { width: 40px; height: 40px; background: #fff0ee; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0; }
     .doc-info { flex: 1; min-width: 0; }
     .doc-name { font-size: 0.88rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .doc-sub { font-size: 0.73rem; color: var(--muted); margin-top: 2px; }
-    .btn-v, .btn-d {
-      padding: 5px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 600;
-      cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif;
-      text-decoration: none; transition: all 0.15s; white-space: nowrap;
-    }
+    .btn-v, .btn-d { padding: 5px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif; text-decoration: none; transition: all 0.15s; white-space: nowrap; }
     .btn-v { background: var(--accent-light); color: var(--accent); border: 1px solid #b0d8be; margin-right: 5px; }
     .btn-v:hover { background: #cce8d8; }
     .btn-d { background: var(--accent); color: #fff; border: 1px solid var(--accent); }
     .btn-d:hover { background: #145030; }
 
-    /* EMPTY / INTRO */
     .centered-state { text-align: center; padding: 3rem 1rem; color: var(--muted); }
     .state-icon { font-size: 2.8rem; opacity: 0.3; margin-bottom: 0.75rem; }
     .centered-state p { font-size: 0.88rem; line-height: 1.6; }
-
-    /* STEP GUIDE */
-    .step-guide {
-      background: var(--card); border: 1px solid var(--border);
-      border-radius: var(--radius); padding: 1.25rem 1.5rem;
-      margin-bottom: 1rem; box-shadow: 0 2px 12px rgba(0,0,0,0.06);
-    }
-    .step-guide h3 { font-size: 0.82rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 1rem; }
-    .steps { display: flex; flex-direction: column; gap: 10px; }
-    .step { display: flex; align-items: flex-start; gap: 12px; }
-    .step-num { width: 26px; height: 26px; background: var(--accent); color: #fff; border-radius: 50%; font-size: 0.75rem; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
-    .step-text { font-size: 0.82rem; line-height: 1.55; color: var(--text); }
-    .step-text strong { color: var(--accent); }
-    .step-text a { color: var(--accent); }
-    .step-text code { background: rgba(0,0,0,0.07); padding: 1px 5px; border-radius: 4px; font-size: 0.75rem; }
-
-    .stabs { display: flex; gap: 6px; justify-content: center; margin-bottom: 10px; }
-    .stab { background: rgba(255,255,255,0.15); color: rgba(255,255,255,0.8); border: 1px solid rgba(255,255,255,0.25); padding: 6px 18px; border-radius: 20px; font-size: 0.82rem; font-weight: 600; cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif; transition: all 0.2s; }
-    .stab.active { background: #fff; color: var(--accent); border-color: #fff; }
-    .stab:hover:not(.active) { background: rgba(255,255,255,0.25); }
 
     footer { text-align: center; padding: 1.5rem; font-size: 0.73rem; color: var(--muted); border-top: 1px solid var(--border); }
 
     @media(max-width:560px) {
       .hero h1 { font-size: 1.5rem; }
-      .setup-row { grid-template-columns: 1fr; }
-      .btn-v, .btn-d { font-size: 0.7rem; padding: 4px 9px; }
+      .wa-input-wrap { flex-wrap: wrap; }
+      .wa-prefix { border-radius: 8px 8px 0 0; border-right: 1px solid var(--border); border-bottom: none; width: 100%; }
+      #wa-input { border-left: 1px solid var(--border); border-top: none; border-radius: 0; }
+      #kirim-wa-btn { border-radius: 0 0 8px 8px; width: 100%; justify-content: center; padding: 10px; }
     }
   </style>
 </head>
@@ -206,7 +104,7 @@
     <div class="logo-box">📚</div>
     Portal Dokumen Siswa
   </div>
-  <span class="hbadge">100% Gratis</span>
+  <span class="hbadge">SMPN 4 Arjasa</span>
 </header>
 
 <div class="hero">
@@ -227,22 +125,18 @@
 </div>
 
 <main>
+  <input type="hidden" id="webapp-url" value="https://script.google.com/macros/s/AKfycbzaU0SQot3gKfa3ss8W9CZzHCjbTzpM64eFAKDKc7yiuGBGja2EZ5Wb_2rPA734qzO6TQ/exec"/>
 
-  <input type="hidden" id="webapp-url" value="https://script.google.com/macros/s/AKfycbwvNhoOPhLKAMwur9oywz-eT_2Z5gmvBAnv913yIsunus3PwfPLL0-FmVViXbnuHR--SA/exec"/>
-
-  <!-- LOADING -->
   <div id="status">
     <div class="spinner"></div>
     <p id="status-text">Sedang mencari data...</p>
   </div>
 
-  <!-- ERROR -->
   <div id="error-box">
     <span>⚠️</span>
     <div id="error-text"></div>
   </div>
 
-  <!-- STUDENT CARD -->
   <div id="student-card">
     <div class="sc-header">
       <div class="sc-avatar" id="sc-avatar">?</div>
@@ -254,7 +148,20 @@
     </div>
   </div>
 
-  <!-- DOKUMEN -->
+  <!-- FORM KIRIM WA -->
+  <div id="wa-form">
+    <div class="wa-form-title">📲 Kirim link dokumen ke WhatsApp</div>
+    <div class="wa-input-wrap">
+      <div class="wa-prefix">+62</div>
+      <input type="tel" id="wa-input" placeholder="8xxxxxxxxxx" maxlength="13" inputmode="numeric"/>
+      <button id="kirim-wa-btn" onclick="kirimWA()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.125.558 4.126 1.535 5.862L.057 23.009a.75.75 0 00.934.934l5.147-1.478A11.943 11.943 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.907 0-3.693-.505-5.24-1.388l-.376-.217-3.894 1.118 1.118-3.894-.217-.376A9.952 9.952 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+        Kirim WA
+      </button>
+    </div>
+    <p class="wa-hint">Masukkan nomor WhatsApp siswa (tanpa 0 di depan). Link dokumen akan dikirim otomatis.</p>
+  </div>
+
   <div id="docs-wrap">
     <div class="docs-bar">
       <span class="docs-label">📄 Dokumen Tersedia</span>
@@ -263,24 +170,22 @@
     <div id="doc-list"></div>
   </div>
 
-  <!-- EMPTY -->
   <div id="empty-state" class="centered-state" style="display:none;">
     <div class="state-icon">🔍</div>
-    <p>Tidak ditemukan dokumen untuk NISN tersebut.<br/>Pastikan NISN benar dan folder siswa sudah dibuat di Drive.</p>
+    <p>Tidak ditemukan dokumen.<br/>Pastikan NISN/nama benar dan folder siswa sudah dibuat di Drive.</p>
   </div>
 
-  <!-- INTRO -->
   <div id="intro-state" class="centered-state">
     <div class="state-icon">📂</div>
-    <p>Masukkan NISN di kolom pencarian di atas<br/>untuk menampilkan dokumen siswa.</p>
+    <p>Masukkan NISN atau nama siswa<br/>untuk menampilkan dokumen.</p>
   </div>
-
 </main>
 
-<footer>Portal Dokumen Siswa &nbsp;·&nbsp; Menggunakan Google Apps Script &amp; Google Drive &nbsp;·&nbsp; Gratis</footer>
+<footer>Portal Dokumen Siswa &nbsp;·&nbsp; SMPN 4 Arjasa &nbsp;·&nbsp; Menggunakan Google Drive</footer>
 
 <script>
 var activeTab = 'nisn';
+var dokumenCache = [];
 
 function switchTab(tab) {
   activeTab = tab;
@@ -289,15 +194,13 @@ function switchTab(tab) {
   var inp = document.getElementById('search-input');
   inp.value = '';
   if (tab === 'nisn') {
-    inp.maxLength = 10;
-    inp.inputMode = 'numeric';
+    inp.maxLength = 10; inp.inputMode = 'numeric';
     inp.placeholder = 'Masukkan 10 digit NISN';
     inp.className = '';
     document.getElementById('search-prefix').textContent = 'NISN';
     document.getElementById('search-hint').textContent = 'Contoh NISN: 0012345678';
   } else {
-    inp.maxLength = 60;
-    inp.inputMode = 'text';
+    inp.maxLength = 60; inp.inputMode = 'text';
     inp.placeholder = 'Masukkan nama siswa';
     inp.className = 'mode-nama';
     document.getElementById('search-prefix').textContent = 'NAMA';
@@ -308,12 +211,21 @@ function switchTab(tab) {
 }
 
 function setState(s) {
-  var ids = ['status','error-box','student-card','docs-wrap','empty-state','intro-state'];
-  ids.forEach(function(id){ var el=document.getElementById(id); if(el) el.style.display='none'; });
+  ['status','error-box','student-card','wa-form','docs-wrap','empty-state','intro-state'].forEach(function(id){
+    var el = document.getElementById(id);
+    if (el) el.style.display = 'none';
+  });
   if (s==='loading') document.getElementById('status').style.display='block';
   else if (s==='error') document.getElementById('error-box').style.display='flex';
-  else if (s==='result') { document.getElementById('student-card').style.display='block'; document.getElementById('docs-wrap').style.display='block'; }
-  else if (s==='empty') { document.getElementById('student-card').style.display='block'; document.getElementById('empty-state').style.display='block'; }
+  else if (s==='result') {
+    document.getElementById('student-card').style.display='block';
+    document.getElementById('wa-form').style.display='block';
+    document.getElementById('docs-wrap').style.display='block';
+  }
+  else if (s==='empty') {
+    document.getElementById('student-card').style.display='block';
+    document.getElementById('empty-state').style.display='block';
+  }
   else if (s==='intro') document.getElementById('intro-state').style.display='block';
 }
 
@@ -327,36 +239,36 @@ function getInitials(name) {
 }
 
 function formatSize(bytes) {
-  if (!bytes || bytes==0) return '';
-  if (bytes < 1024) return bytes + ' B';
-  if (bytes < 1048576) return (bytes/1024).toFixed(1) + ' KB';
-  return (bytes/1048576).toFixed(1) + ' MB';
+  if (!bytes||bytes==0) return '';
+  if (bytes<1024) return bytes+' B';
+  if (bytes<1048576) return (bytes/1024).toFixed(1)+' KB';
+  return (bytes/1048576).toFixed(1)+' MB';
 }
 
 function cariDokumen() {
   var url = document.getElementById('webapp-url').value.trim();
   var val = document.getElementById('search-input').value.trim();
-  var nisn = '', nama = '';
+  var nisn='', nama='';
 
-  if (activeTab === 'nisn') {
+  if (activeTab==='nisn') {
     nisn = val;
     if (!nisn) { showError('Harap masukkan NISN terlebih dahulu.'); return; }
     if (!/^\d{10}$/.test(nisn)) { showError('NISN harus tepat <strong>10 angka</strong>. Contoh: <code>0012345678</code>'); return; }
   } else {
     nama = val;
-    if (!nama) { showError('Harap masukkan nama siswa terlebih dahulu.'); return; }
+    if (!nama) { showError('Harap masukkan nama siswa.'); return; }
     if (nama.length < 3) { showError('Nama terlalu pendek, minimal 3 karakter.'); return; }
   }
 
   if (!url) { showError('URL Web App tidak ditemukan.'); return; }
 
   setState('loading');
-  document.getElementById('status-text').textContent = nisn ? 'Mencari NISN ' + nisn + ' ...' : 'Mencari nama "' + nama + '" ...';
+  document.getElementById('status-text').textContent = nisn ? 'Mencari NISN '+nisn+' ...' : 'Mencari "'+nama+'" ...';
 
-  var cbName = 'cb_' + Date.now();
+  var cbName = 'cb_'+Date.now();
   var script = document.createElement('script');
   var timeout = setTimeout(function(){
-    showError('Waktu habis. Periksa URL Web App dan koneksi internet kamu.');
+    showError('Waktu habis. Periksa koneksi internet.');
     if (document.body.contains(script)) document.body.removeChild(script);
   }, 15000);
 
@@ -367,80 +279,106 @@ function cariDokumen() {
     handleResponse(data);
   };
 
-  var qs = nisn ? 'nisn=' + encodeURIComponent(nisn) : 'nama=' + encodeURIComponent(nama);
-  script.src = url + '?' + qs + '&callback=' + cbName;
+  var qs = nisn ? 'nisn='+encodeURIComponent(nisn) : 'nama='+encodeURIComponent(nama);
+  script.src = url+'?'+qs+'&callback='+cbName;
   script.onerror = function() {
     clearTimeout(timeout);
-    showError('Gagal terhubung ke server. Pastikan URL Web App benar dan sudah di-deploy sebagai <strong>Anyone</strong>.');
+    showError('Gagal terhubung ke server. Pastikan URL Web App sudah di-deploy sebagai <strong>Anyone</strong>.');
     if (document.body.contains(script)) document.body.removeChild(script);
   };
   document.body.appendChild(script);
 }
 
 function handleResponse(data) {
-  if (!data) { showError('Respons tidak valid dari server.'); return; }
-  if (data.status === 'error') { showError(data.message || 'Terjadi kesalahan di server.'); return; }
+  if (!data) { showError('Respons tidak valid.'); return; }
+  if (data.status==='error') { showError(data.message||'Terjadi kesalahan.'); return; }
 
-  if (data.status === 'not_found' || !data.hasil || data.hasil.length === 0) {
-    var keyword = data.nisn || data.nama || '';
+  if (data.status==='not_found' || !data.hasil || data.hasil.length===0) {
     document.getElementById('sc-avatar').textContent = '?';
     document.getElementById('sc-name').textContent = 'Siswa Tidak Ditemukan';
-    document.getElementById('sc-meta').textContent = 'Kata kunci: ' + keyword;
-    document.getElementById('sc-nisn').textContent = data.nisn ? 'NISN: ' + data.nisn : 'Nama: ' + data.nama;
+    document.getElementById('sc-meta').textContent = 'Kata kunci: '+(data.nisn||data.nama||'');
+    document.getElementById('sc-nisn').textContent = data.nisn ? 'NISN: '+data.nisn : 'Nama: '+data.nama;
     setState('empty');
     return;
   }
 
+  dokumenCache = data.hasil;
   var list = document.getElementById('doc-list');
   list.innerHTML = '';
   var totalDok = 0;
 
   data.hasil.forEach(function(siswa) {
-    // Tampilkan header per siswa (untuk pencarian nama bisa lebih dari 1)
     if (data.hasil.length > 1) {
-      var divHeader = document.createElement('div');
-      divHeader.style.cssText = 'background:var(--accent-light);border:1px solid #c8e6d7;border-radius:10px;padding:10px 14px;margin-bottom:6px;margin-top:10px;display:flex;align-items:center;gap:10px;';
-      divHeader.innerHTML = '<div style="width:36px;height:36px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.9rem;flex-shrink:0;">' + getInitials(siswa.namaSiswa) + '</div>'
-        + '<div><div style="font-weight:700;font-size:0.9rem;">' + siswa.namaSiswa + '</div>'
-        + '<div style="font-size:0.75rem;color:var(--muted);">📁 ' + siswa.namaFolder + ' · ' + siswa.totalFile + ' dokumen</div></div>';
-      list.appendChild(divHeader);
+      var h = document.createElement('div');
+      h.style.cssText = 'background:var(--accent-light);border:1px solid #c8e6d7;border-radius:10px;padding:10px 14px;margin-bottom:6px;margin-top:10px;display:flex;align-items:center;gap:10px;';
+      h.innerHTML = '<div style="width:36px;height:36px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.9rem;flex-shrink:0;">'+getInitials(siswa.namaSiswa)+'</div>'
+        +'<div><div style="font-weight:700;font-size:0.9rem;">'+siswa.namaSiswa+'</div>'
+        +'<div style="font-size:0.75rem;color:var(--muted);">📁 '+siswa.namaFolder+' · '+siswa.totalFile+' dokumen</div></div>';
+      list.appendChild(h);
     }
-
     siswa.dokumen.forEach(function(doc) {
       var d = document.createElement('div');
       d.className = 'doc-item';
       d.innerHTML = '<div class="doc-ico">📄</div>'
-        + '<div class="doc-info"><div class="doc-name" title="' + doc.nama + '">' + doc.nama + '</div>'
-        + '<div class="doc-sub">' + (formatSize(doc.ukuran) ? formatSize(doc.ukuran) + ' · ' : '') + (doc.tanggal||'') + '</div></div>'
-        + '<div><a class="btn-v" href="' + doc.viewUrl + '" target="_blank">👁️ Lihat</a>'
-        + '<a class="btn-d" href="' + doc.downloadUrl + '" target="_blank">⬇️ Unduh</a></div>';
+        +'<div class="doc-info"><div class="doc-name" title="'+doc.nama+'">'+doc.nama+'</div>'
+        +'<div class="doc-sub">'+(formatSize(doc.ukuran)?formatSize(doc.ukuran)+' · ':'')+( doc.tanggal||'')+'</div></div>'
+        +'<div><a class="btn-v" href="'+doc.viewUrl+'" target="_blank">👁️ Lihat</a>'
+        +'<a class="btn-d" href="'+doc.downloadUrl+'" target="_blank">⬇️ Unduh</a></div>';
       list.appendChild(d);
       totalDok++;
     });
-
-    if (siswa.dokumen.length === 0) {
-      var empty = document.createElement('div');
-      empty.style.cssText = 'text-align:center;padding:1rem;color:var(--muted);font-size:0.82rem;';
-      empty.textContent = 'Tidak ada dokumen PDF di folder ini.';
-      list.appendChild(empty);
+    if (siswa.dokumen.length===0) {
+      var e = document.createElement('div');
+      e.style.cssText = 'text-align:center;padding:1rem;color:var(--muted);font-size:0.82rem;';
+      e.textContent = 'Tidak ada dokumen PDF di folder ini.';
+      list.appendChild(e);
     }
   });
 
-  // Update student card (pakai data siswa pertama)
   var first = data.hasil[0];
   document.getElementById('sc-avatar').textContent = getInitials(first.namaSiswa);
-  document.getElementById('sc-name').textContent = data.hasil.length > 1 ? data.hasil.length + ' siswa ditemukan' : first.namaSiswa;
-  document.getElementById('sc-meta').textContent = '📁 ' + (data.hasil.length > 1 ? 'Pencarian: ' + data.nama : first.namaFolder);
-  document.getElementById('sc-nisn').textContent = data.nisn ? 'NISN: ' + data.nisn : 'Nama: ' + data.nama;
-  document.getElementById('docs-count').textContent = totalDok + ' dokumen';
+  document.getElementById('sc-name').textContent = data.hasil.length>1 ? data.hasil.length+' siswa ditemukan' : first.namaSiswa;
+  document.getElementById('sc-meta').textContent = '📁 '+(data.hasil.length>1 ? 'Pencarian: '+data.nama : first.namaFolder);
+  document.getElementById('sc-nisn').textContent = data.nisn ? 'NISN: '+data.nisn : 'Nama: '+data.nama;
+  document.getElementById('docs-count').textContent = totalDok+' dokumen';
 
+  document.getElementById('wa-input').value = '';
   setState('result');
 }
 
+function kirimWA() {
+  var noWA = document.getElementById('wa-input').value.trim().replace(/\D/g,'');
+  if (!noWA) { alert('Harap masukkan nomor WhatsApp siswa.'); return; }
+  if (noWA.startsWith('0')) noWA = noWA.substring(1);
+  if (noWA.length < 8) { alert('Nomor WhatsApp tidak valid.'); return; }
+
+  var pesan = '📚 *Portal Dokumen Siswa - SMPN 4 Arjasa*\n\n';
+
+  if (dokumenCache.length > 0) {
+    dokumenCache.forEach(function(siswa) {
+      pesan += '👤 *'+siswa.namaSiswa+'*\n';
+      if (siswa.dokumen.length === 0) {
+        pesan += '_(Tidak ada dokumen tersedia)_\n';
+      } else {
+        siswa.dokumen.forEach(function(doc, i) {
+          pesan += (i+1)+'. '+doc.nama+'\n';
+          pesan += '   🔗 Lihat: '+doc.viewUrl+'\n';
+        });
+      }
+      pesan += '\n';
+    });
+  }
+
+  pesan += '_Dokumen ini dikirim melalui Portal Dokumen Siswa SMPN 4 Arjasa._';
+
+  var waUrl = 'https://wa.me/62'+noWA+'?text='+encodeURIComponent(pesan);
+  window.open(waUrl, '_blank');
+}
+
 document.getElementById('search-input').addEventListener('keydown', function(e){ if(e.key==='Enter') cariDokumen(); });
-document.getElementById('search-input').addEventListener('input', function(){
-  if (activeTab === 'nisn') this.value = this.value.replace(/\D/g,'');
-});
+document.getElementById('search-input').addEventListener('input', function(){ if(activeTab==='nisn') this.value=this.value.replace(/\D/g,''); });
+document.getElementById('wa-input').addEventListener('keydown', function(e){ if(e.key==='Enter') kirimWA(); });
+document.getElementById('wa-input').addEventListener('input', function(){ this.value=this.value.replace(/\D/g,''); });
 
 setState('intro');
 </script>

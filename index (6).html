@@ -1,4 +1,4 @@
-<!-- v3 -->
+<!-- v4 -->
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -87,13 +87,13 @@
   <p>Rapor, sertifikat, dan dokumen lainnya tersimpan di Google Drive.</p>
   <div class="search-wrap">
     <div class="mode-toggle">
-      <button class="mode-btn on" id="btn-nisn" onclick="setMode('nisn')">🔢 NISN</button>
-      <button class="mode-btn" id="btn-nama" onclick="setMode('nama')">👤 Nama</button>
+      <button class="mode-btn on" id="btn-nisn">🔢 NISN</button>
+      <button class="mode-btn" id="btn-nama">👤 Nama</button>
     </div>
     <div class="sbox">
       <div class="sprefix" id="pfx">NISN</div>
       <input type="text" id="si" maxlength="10" inputmode="numeric" placeholder="Masukkan 10 digit NISN"/>
-      <button id="cari-btn" onclick="cari()">🔍 Cari</button>
+      <button id="cari-btn">🔍 Cari</button>
     </div>
     <p class="shint" id="hint">Contoh NISN: 0012345678</p>
   </div>
@@ -189,11 +189,12 @@ function fsz(b) {
 }
 
 function cari() {
+  var isNisn = document.getElementById('btn-nisn').className.indexOf('on') > -1;
   var url = document.getElementById('wurl').value.trim();
   var val = document.getElementById('si').value.trim();
   var nisn='', nama='';
 
-  if (MODE==='nisn') {
+  if (isNisn) {
     nisn = val;
     if (!nisn) { err('Harap masukkan NISN.'); return; }
     if (!/^\d{10}$/.test(nisn)) { err('NISN harus 10 angka. Contoh: <code>0012345678</code>'); return; }
@@ -290,10 +291,17 @@ function kirimWA() {
   window.open('https://wa.me/62'+no+'?text='+encodeURIComponent(p),'_blank');
 }
 
-document.getElementById('si').addEventListener('keydown',function(e){if(e.key==='Enter')cari();});
-document.getElementById('si').addEventListener('input',function(){if(MODE==='nisn')this.value=this.value.replace(/\D/g,'');});
-document.getElementById('wai').addEventListener('keydown',function(e){if(e.key==='Enter')kirimWA();});
-document.getElementById('wai').addEventListener('input',function(){this.value=this.value.replace(/\D/g,'');});
+document.getElementById('btn-nisn').addEventListener('click', function(){ setMode('nisn'); });
+document.getElementById('btn-nama').addEventListener('click', function(){ setMode('nama'); });
+document.getElementById('cari-btn').addEventListener('click', function(){ cari(); });
+document.getElementById('si').addEventListener('keydown', function(e){ if(e.key==='Enter') cari(); });
+document.getElementById('si').addEventListener('input', function(){
+  if (document.getElementById('btn-nisn').className.indexOf('on') > -1) {
+    this.value = this.value.replace(/\D/g,'');
+  }
+});
+document.getElementById('wai').addEventListener('keydown', function(e){ if(e.key==='Enter') kirimWA(); });
+document.getElementById('wai').addEventListener('input', function(){ this.value=this.value.replace(/\D/g,''); });
 
 show('intro');
 </script>

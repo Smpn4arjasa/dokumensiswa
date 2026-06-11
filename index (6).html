@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Portal Dokumen Siswa</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Mono:wght@700&display=swap" rel="stylesheet"/>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#f4f2ed;--card:#fff;--border:#e0ddd5;--text:#1a1915;--muted:#7a7870;--accent:#1a5c3a;--alight:#e6f2ec;--amid:#2d8c5a;--wa:#25D366;--wad:#128C7E;--danger:#c0392b;--dbg:#fdf0ee;--r:14px}
+    body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+    header{background:var(--accent);padding:0 2rem;height:60px;display:flex;align-items:center;justify-content:space-between}
+    .logo{display:flex;align-items:center;gap:10px;color:#fff;font-weight:700;font-size:.95rem}
+    .logo-box{width:32px;height:32px;background:rgba(255,255,255,.15);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1rem}
+    .hbadge{background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.2);padding:3px 10px;border-radius:20px;font-size:.7rem;font-weight:500}
+    .hero{background:var(--accent);padding:3rem 1.5rem 5rem;text-align:center;color:#fff}
+    .hero h1{font-size:2rem;font-weight:700;letter-spacing:-.5px;margin-bottom:.5rem}
+    .hero p{color:rgba(255,255,255,.7);font-size:.95rem;margin-bottom:2rem}
+    .search-wrap{max-width:540px;margin:0 auto}
+
+    /* MODE TOGGLE */
+    .mode-toggle{display:flex;gap:6px;justify-content:center;margin-bottom:12px}
+    .mode-btn{background:rgba(255,255,255,.15);color:rgba(255,255,255,.8);border:1px solid rgba(255,255,255,.25);padding:7px 20px;border-radius:20px;font-size:.82rem;font-weight:600;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;transition:all .2s}
+    .mode-btn.on{background:#fff;color:var(--accent);border-color:#fff}
+    .mode-btn:hover:not(.on){background:rgba(255,255,255,.25)}
+
+    .sbox{display:flex;background:#fff;border-radius:50px;overflow:hidden;box-shadow:0 8px 28px rgba(0,0,0,.2)}
+    .sprefix{padding:0 1rem 0 1.3rem;display:flex;align-items:center;color:var(--muted);font-size:.75rem;font-weight:700;letter-spacing:.5px;border-right:1px solid var(--border);white-space:nowrap}
+    #si{flex:1;border:none;outline:none;padding:.9rem .75rem;font-size:1.1rem;font-family:'Space Mono',monospace;font-weight:700;letter-spacing:2px;color:var(--text);background:transparent}
+    #si::placeholder{color:#ccc;font-weight:400;letter-spacing:0;font-family:'Plus Jakarta Sans',sans-serif;font-size:.9rem}
+    #si.nama{font-family:'Plus Jakarta Sans',sans-serif;letter-spacing:0;font-size:1rem;font-weight:600}
+    #cari-btn{background:var(--accent);color:#fff;border:none;padding:0 1.4rem;font-size:.9rem;font-weight:600;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;border-radius:0 50px 50px 0;transition:background .2s;white-space:nowrap}
+    #cari-btn:hover{background:#145030}
+    .shint{margin-top:.6rem;font-size:.75rem;color:rgba(255,255,255,.45)}
+
+    main{max-width:740px;margin:-2.5rem auto 0;padding:0 1.25rem 4rem}
+    #status{display:none;text-align:center;padding:2.5rem 1rem}
+    .spinner{width:32px;height:32px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto .75rem}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    #status p{color:var(--muted);font-size:.88rem}
+    #err{display:none;align-items:flex-start;gap:10px;background:var(--dbg);border:1px solid #f5c6c1;border-radius:var(--r);padding:1rem 1.25rem;color:var(--danger);font-size:.88rem;margin-bottom:1rem}
+    #sc{display:none;background:var(--card);border:1px solid var(--border);border-radius:var(--r);box-shadow:0 2px 12px rgba(0,0,0,.06);margin-bottom:1rem;overflow:hidden}
+    .sch{background:var(--alight);border-bottom:1px solid #c8e6d7;padding:1.1rem 1.5rem;display:flex;align-items:center;gap:1rem}
+    .sca{width:48px;height:48px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.1rem;font-weight:700;flex-shrink:0}
+    .scn{font-size:1.1rem;font-weight:700;letter-spacing:-.2px}
+    .scm{font-size:.78rem;color:var(--muted);margin-top:2px}
+    .ntag{display:inline-block;background:var(--accent);color:#fff;font-family:'Space Mono',monospace;font-size:.72rem;font-weight:700;padding:2px 10px;border-radius:20px;margin-top:5px}
+    #waf{display:none;background:var(--card);border:1px solid #b2dfdb;border-radius:var(--r);padding:1.25rem 1.5rem;margin-bottom:1rem;box-shadow:0 2px 12px rgba(0,0,0,.06)}
+    .waft{font-size:.85rem;font-weight:600;color:var(--text);margin-bottom:.75rem}
+    .waiw{display:flex;gap:0}
+    .wapfx{background:var(--bg);border:1px solid var(--border);border-right:none;border-radius:8px 0 0 8px;padding:0 12px;display:flex;align-items:center;font-size:.85rem;font-weight:600;color:var(--muted);white-space:nowrap}
+    #wai{flex:1;border:1px solid var(--border);border-left:none;border-radius:0;padding:10px 12px;font-size:.9rem;font-family:'Space Mono',monospace;font-weight:700;letter-spacing:1px;outline:none;color:var(--text);background:#fff;transition:border-color .2s}
+    #wai:focus{border-color:var(--wad)}
+    #wai::placeholder{font-family:'Plus Jakarta Sans',sans-serif;font-weight:400;letter-spacing:0;color:#ccc}
+    #wabtn{background:var(--wa);color:#fff;border:none;padding:0 1.2rem;border-radius:0 8px 8px 0;font-size:.85rem;font-weight:600;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;white-space:nowrap;transition:background .2s;display:flex;align-items:center;gap:6px}
+    #wabtn:hover{background:var(--wad)}
+    .wah{font-size:.75rem;color:var(--muted);margin-top:6px}
+    #dw{display:none}
+    .db{display:flex;align-items:center;justify-content:space-between;margin:1.2rem 0 .6rem}
+    .dl{font-size:.88rem;font-weight:600}
+    .dc{font-size:.75rem;color:var(--muted)}
+    .di{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:.9rem 1.1rem;display:flex;align-items:center;gap:.9rem;margin-bottom:7px;transition:border-color .2s,box-shadow .2s}
+    .di:hover{border-color:#a8d8bc;box-shadow:0 3px 10px rgba(26,92,58,.08)}
+    .dic{width:40px;height:40px;background:#fff0ee;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0}
+    .din{flex:1;min-width:0}
+    .dname{font-size:.88rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .dsub{font-size:.73rem;color:var(--muted);margin-top:2px}
+    .bv,.bd{padding:5px 12px;border-radius:20px;font-size:.75rem;font-weight:600;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;text-decoration:none;transition:all .15s;white-space:nowrap}
+    .bv{background:var(--alight);color:var(--accent);border:1px solid #b0d8be;margin-right:5px}
+    .bv:hover{background:#cce8d8}
+    .bd{background:var(--accent);color:#fff;border:1px solid var(--accent)}
+    .bd:hover{background:#145030}
+    .cs{text-align:center;padding:3rem 1rem;color:var(--muted)}
+    .si2{font-size:2.8rem;opacity:.3;margin-bottom:.75rem}
+    .cs p{font-size:.88rem;line-height:1.6}
+    footer{text-align:center;padding:1.5rem;font-size:.73rem;color:var(--muted);border-top:1px solid var(--border)}
+  </style>
+</head>
+<body>
+<header>
+  <div class="logo"><div class="logo-box">📚</div>Portal Dokumen Siswa</div>
+  <span class="hbadge">SMPN 4 Arjasa</span>
+</header>
+<div class="hero">
+  <h1>Cari Dokumen Siswa</h1>
+  <p>Rapor, sertifikat, dan dokumen lainnya tersimpan di Google Drive.</p>
+  <div class="search-wrap">
+    <div class="mode-toggle">
+      <button class="mode-btn on" id="btn-nisn" onclick="setMode('nisn')">🔢 NISN</button>
+      <button class="mode-btn" id="btn-nama" onclick="setMode('nama')">👤 Nama</button>
+    </div>
+    <div class="sbox">
+      <div class="sprefix" id="pfx">NISN</div>
+      <input type="text" id="si" maxlength="10" inputmode="numeric" placeholder="Masukkan 10 digit NISN"/>
+      <button id="cari-btn" onclick="cari()">🔍 Cari</button>
+    </div>
+    <p class="shint" id="hint">Contoh NISN: 0012345678</p>
+  </div>
+</div>
+<main>
+  <input type="hidden" id="wurl" value="https://script.google.com/macros/s/AKfycbzaU0SQot3gKfa3ss8W9CZzHCjbTzpM64eFAKDKc7yiuGBGja2EZ5Wb_2rPA734qzO6TQ/exec"/>
+  <div id="status"><div class="spinner"></div><p id="stxt">Sedang mencari...</p></div>
+  <div id="err"><span>⚠️</span><div id="errtxt"></div></div>
+  <div id="sc"><div class="sch"><div class="sca" id="sca">?</div><div><div class="scn" id="scn">—</div><div class="scm" id="scm">—</div><div class="ntag" id="sck">—</div></div></div></div>
+  <div id="waf">
+    <div class="waft">📲 Kirim link dokumen ke WhatsApp siswa</div>
+    <div class="waiw">
+      <div class="wapfx">+62</div>
+      <input type="tel" id="wai" placeholder="8xxxxxxxxxx" maxlength="13" inputmode="numeric"/>
+      <button id="wabtn" onclick="kirimWA()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.125.558 4.126 1.535 5.862L.057 23.009a.75.75 0 00.934.934l5.147-1.478A11.943 11.943 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.907 0-3.693-.505-5.24-1.388l-.376-.217-3.894 1.118 1.118-3.894-.217-.376A9.952 9.952 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+        Kirim WA
+      </button>
+    </div>
+    <p class="wah">Masukkan nomor WA siswa tanpa angka 0 di depan. Contoh: 8123456789</p>
+  </div>
+  <div id="dw"><div class="db"><span class="dl">📄 Dokumen Tersedia</span><span class="dc" id="dcnt"></span></div><div id="dlist"></div></div>
+  <div id="empty" class="cs" style="display:none"><div class="si2">🔍</div><p>Tidak ditemukan dokumen.<br/>Pastikan NISN/nama benar.</p></div>
+  <div id="intro" class="cs"><div class="si2">📂</div><p>Masukkan NISN atau nama siswa<br/>untuk menampilkan dokumen.</p></div>
+</main>
+<footer>Portal Dokumen Siswa · SMPN 4 Arjasa · Menggunakan Google Drive</footer>
+<script>
+var MODE = 'nisn';
+var CACHE = [];
+
+function setMode(m) {
+  MODE = m;
+  var inp = document.getElementById('si');
+  inp.value = '';
+
+  if (m === 'nisn') {
+    document.getElementById('btn-nisn').className = 'mode-btn on';
+    document.getElementById('btn-nama').className = 'mode-btn';
+    inp.className = '';
+    inp.setAttribute('maxlength','10');
+    inp.setAttribute('inputmode','numeric');
+    inp.placeholder = 'Masukkan 10 digit NISN';
+    document.getElementById('pfx').textContent = 'NISN';
+    document.getElementById('hint').textContent = 'Contoh NISN: 0012345678';
+  } else {
+    document.getElementById('btn-nisn').className = 'mode-btn';
+    document.getElementById('btn-nama').className = 'mode-btn on';
+    inp.className = 'nama';
+    inp.setAttribute('maxlength','60');
+    inp.setAttribute('inputmode','text');
+    inp.placeholder = 'Masukkan nama siswa';
+    document.getElementById('pfx').textContent = 'NAMA';
+    document.getElementById('hint').textContent = 'Contoh: Budi Santoso';
+  }
+  inp.focus();
+  show('intro');
+}
+
+function show(s) {
+  var ids = ['status','err','sc','waf','dw','empty','intro'];
+  for (var i=0; i<ids.length; i++) {
+    var el = document.getElementById(ids[i]);
+    if (el) el.style.display = 'none';
+  }
+  if (s==='loading') document.getElementById('status').style.display='block';
+  else if (s==='err') document.getElementById('err').style.display='flex';
+  else if (s==='result') {
+    document.getElementById('sc').style.display='block';
+    document.getElementById('waf').style.display='block';
+    document.getElementById('dw').style.display='block';
+  }
+  else if (s==='empty') {
+    document.getElementById('sc').style.display='block';
+    document.getElementById('empty').style.display='block';
+  }
+  else document.getElementById('intro').style.display='block';
+}
+
+function err(msg) {
+  document.getElementById('errtxt').innerHTML = msg;
+  show('err');
+}
+
+function ini(n) {
+  return n.split(' ').slice(0,2).map(function(w){return w[0]||'';}).join('').toUpperCase()||'?';
+}
+
+function fsz(b) {
+  if (!b||b==0) return '';
+  if (b<1024) return b+' B';
+  if (b<1048576) return (b/1024).toFixed(1)+' KB';
+  return (b/1048576).toFixed(1)+' MB';
+}
+
+function cari() {
+  var url = document.getElementById('wurl').value.trim();
+  var val = document.getElementById('si').value.trim();
+  var nisn='', nama='';
+
+  if (MODE==='nisn') {
+    nisn = val;
+    if (!nisn) { err('Harap masukkan NISN.'); return; }
+    if (!/^\d{10}$/.test(nisn)) { err('NISN harus 10 angka. Contoh: <code>0012345678</code>'); return; }
+  } else {
+    nama = val;
+    if (!nama||nama.length<3) { err('Masukkan nama siswa minimal 3 huruf.'); return; }
+  }
+
+  show('loading');
+  document.getElementById('stxt').textContent = nisn ? 'Mencari NISN '+nisn+'...' : 'Mencari "'+nama+'"...';
+
+  var cb = 'cb'+Date.now();
+  var s = document.createElement('script');
+  var t = setTimeout(function(){ err('Waktu habis. Cek koneksi internet.'); if(document.body.contains(s)) document.body.removeChild(s); }, 15000);
+
+  window[cb] = function(d) {
+    clearTimeout(t);
+    delete window[cb];
+    if (document.body.contains(s)) document.body.removeChild(s);
+    handle(d);
+  };
+
+  s.onerror = function() {
+    clearTimeout(t);
+    err('Gagal terhubung ke server.');
+    if (document.body.contains(s)) document.body.removeChild(s);
+  };
+
+  s.src = url + '?' + (nisn?'nisn='+encodeURIComponent(nisn):'nama='+encodeURIComponent(nama)) + '&callback='+cb;
+  document.body.appendChild(s);
+}
+
+function handle(d) {
+  if (!d||d.status==='error') { err(d?d.message:'Respons tidak valid.'); return; }
+
+  if (d.status==='not_found'||!d.hasil||!d.hasil.length) {
+    document.getElementById('sca').textContent='?';
+    document.getElementById('scn').textContent='Siswa Tidak Ditemukan';
+    document.getElementById('scm').textContent='Kata kunci: '+(d.nisn||d.nama||'');
+    document.getElementById('sck').textContent=d.nisn?'NISN: '+d.nisn:'Nama: '+d.nama;
+    show('empty'); return;
+  }
+
+  CACHE = d.hasil;
+  var list = document.getElementById('dlist');
+  list.innerHTML = '';
+  var tot = 0;
+
+  d.hasil.forEach(function(siswa) {
+    if (d.hasil.length>1) {
+      var h=document.createElement('div');
+      h.style.cssText='background:var(--alight);border:1px solid #c8e6d7;border-radius:10px;padding:10px 14px;margin-bottom:6px;margin-top:10px;display:flex;align-items:center;gap:10px;';
+      h.innerHTML='<div style="width:36px;height:36px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.9rem;flex-shrink:0;">'+ini(siswa.namaSiswa)+'</div><div><div style="font-weight:700;font-size:.9rem;">'+siswa.namaSiswa+'</div><div style="font-size:.75rem;color:var(--muted);">📁 '+siswa.namaFolder+' · '+siswa.totalFile+' dokumen</div></div>';
+      list.appendChild(h);
+    }
+    siswa.dokumen.forEach(function(doc) {
+      var di=document.createElement('div');
+      di.className='di';
+      di.innerHTML='<div class="dic">📄</div><div class="din"><div class="dname" title="'+doc.nama+'">'+doc.nama+'</div><div class="dsub">'+(fsz(doc.ukuran)?fsz(doc.ukuran)+' · ':'')+( doc.tanggal||'')+'</div></div><div><a class="bv" href="'+doc.viewUrl+'" target="_blank">👁️ Lihat</a><a class="bd" href="'+doc.downloadUrl+'" target="_blank">⬇️ Unduh</a></div>';
+      list.appendChild(di);
+      tot++;
+    });
+    if (!siswa.dokumen.length) {
+      var e=document.createElement('div');
+      e.style.cssText='text-align:center;padding:1rem;color:var(--muted);font-size:.82rem;';
+      e.textContent='Tidak ada dokumen PDF di folder ini.';
+      list.appendChild(e);
+    }
+  });
+
+  var f=d.hasil[0];
+  document.getElementById('sca').textContent=ini(f.namaSiswa);
+  document.getElementById('scn').textContent=d.hasil.length>1?d.hasil.length+' siswa ditemukan':f.namaSiswa;
+  document.getElementById('scm').textContent='📁 '+(d.hasil.length>1?'Pencarian: '+d.nama:f.namaFolder);
+  document.getElementById('sck').textContent=d.nisn?'NISN: '+d.nisn:'Nama: '+d.nama;
+  document.getElementById('dcnt').textContent=tot+' dokumen';
+  document.getElementById('wai').value='';
+  show('result');
+}
+
+function kirimWA() {
+  var no = document.getElementById('wai').value.trim().replace(/\D/g,'');
+  if (!no) { alert('Masukkan nomor WhatsApp.'); return; }
+  if (no.startsWith('0')) no=no.substring(1);
+  if (no.length<8) { alert('Nomor tidak valid.'); return; }
+  var p='📚 *Portal Dokumen Siswa - SMPN 4 Arjasa*\n\n';
+  CACHE.forEach(function(siswa){
+    p+='👤 *'+siswa.namaSiswa+'*\n';
+    if (!siswa.dokumen.length) { p+='_(Tidak ada dokumen)_\n'; }
+    else { siswa.dokumen.forEach(function(doc,i){ p+=(i+1)+'. '+doc.nama+'\n   🔗 '+doc.viewUrl+'\n'; }); }
+    p+='\n';
+  });
+  p+='_Dikirim melalui Portal Dokumen Siswa SMPN 4 Arjasa._';
+  window.open('https://wa.me/62'+no+'?text='+encodeURIComponent(p),'_blank');
+}
+
+document.getElementById('si').addEventListener('keydown',function(e){if(e.key==='Enter')cari();});
+document.getElementById('si').addEventListener('input',function(){if(MODE==='nisn')this.value=this.value.replace(/\D/g,'');});
+document.getElementById('wai').addEventListener('keydown',function(e){if(e.key==='Enter')kirimWA();});
+document.getElementById('wai').addEventListener('input',function(){this.value=this.value.replace(/\D/g,'');});
+
+show('intro');
+</script>
+</body>
+</html>

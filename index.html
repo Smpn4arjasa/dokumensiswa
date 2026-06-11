@@ -249,15 +249,18 @@ function cariDokumen() {
   var url = document.getElementById('webapp-url').value.trim();
   var val = document.getElementById('search-input').value.trim();
   var nisn='', nama='';
+  var tab = activeTab;
 
-  if (activeTab==='nisn') {
+  if (tab==='nisn') {
     nisn = val;
     if (!nisn) { showError('Harap masukkan NISN terlebih dahulu.'); return; }
     if (!/^\d{10}$/.test(nisn)) { showError('NISN harus tepat <strong>10 angka</strong>. Contoh: <code>0012345678</code>'); return; }
-  } else {
+  } else if (tab==='nama') {
     nama = val;
     if (!nama) { showError('Harap masukkan nama siswa.'); return; }
     if (nama.length < 3) { showError('Nama terlalu pendek, minimal 3 karakter.'); return; }
+  } else {
+    showError('Pilih metode pencarian: NISN atau Nama.'); return;
   }
 
   if (!url) { showError('URL Web App tidak ditemukan.'); return; }
@@ -376,7 +379,10 @@ function kirimWA() {
 }
 
 document.getElementById('search-input').addEventListener('keydown', function(e){ if(e.key==='Enter') cariDokumen(); });
-document.getElementById('search-input').addEventListener('input', function(){ if(activeTab==='nisn') this.value=this.value.replace(/\D/g,''); });
+document.getElementById('search-input').addEventListener('input', function(){
+  if (activeTab==='nisn') this.value = this.value.replace(/\D/g,'');
+  // mode nama: biarkan semua karakter masuk
+});
 document.getElementById('wa-input').addEventListener('keydown', function(e){ if(e.key==='Enter') kirimWA(); });
 document.getElementById('wa-input').addEventListener('input', function(){ this.value=this.value.replace(/\D/g,''); });
 
